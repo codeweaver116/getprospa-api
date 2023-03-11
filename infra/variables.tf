@@ -1,4 +1,41 @@
-variable "vpc_cidr_block" {
-    default = "10.0.0.0/16" 
-  
+#Ecs variables
+variable "service_desired_count" {
+  description = "Number of tasks running in parallel"
+  type = map(number)
+  default = {
+        qa =1
+        staging = 1
+        development= 2
+        production =4
+    }
+}
+
+variable "container_port" {
+  description = "The port where the Docker is exposed"
+  default     = 8080
+}
+
+variable "container_cpu" {
+  description = "The number of cpu units used by the task"
+  default     = {
+        qa = 256 
+        staging = 256
+        development = 256
+        production = 256
+  }
+}
+
+variable "container_memory" {
+  description = "The amount (in MiB) of memory used by the task"
+   default     = {
+        qa =512  
+        staging = 512 
+        development = 512
+        production = 512
+  }
+}
+
+variable "health_check_path" {
+  description = "Http path for task health check"
+  default     = "/" #change this to your default health check
 }
