@@ -1,132 +1,26 @@
-resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.name}-ecsTaskExecutionRole"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.name}-ecsTaskRole"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_policy" "dynamodb" {
-  name        = "${var.name}-task-policy-dynamodb"
-  description = "Policy that allows access to DynamoDB"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:CreateTable",
-                "dynamodb:UpdateTimeToLive",
-                "dynamodb:PutItem",
-                "dynamodb:DescribeTable",
-                "dynamodb:ListTables",
-                "dynamodb:DeleteItem",
-                "dynamodb:GetItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem",
-                "dynamodb:UpdateTable"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_iam_policy" "secrets" {
-  name        = "${var.name}-task-policy-secrets"
-  description = "Policy that allows access to the secrets we created"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AccessSecrets",
-            "Effect": "Allow",
-            "Action": [
-              "secretsmanager:GetSecretValue"
-            ],
-            "Resource": ${jsonencode(var.container_secrets_arns)}
-        }
-    ]
-}
-EOF
-}
-
-
-resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attachment" {
-  role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
-  role       = aws_iam_role.ecs_task_role.name
-  policy_arn = aws_iam_policy.dynamodb.arn
-}
-
-resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment-for-secrets" {
-  role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = aws_iam_policy.secrets.arn
-}
 
 resource "aws_cloudwatch_log_group" "main" {
-  name = "/ecs/${var.name}-task-${var.environment}"
+  name = "/ecs/${var.stack["api"]}-task-${var.environment["qa"]}"
 
   tags = {
-    Name        = "${var.name}-task-${var.environment}"
-    Environment = var.environment
+    Name        = "${var.stack["api"]}-task-${var.environment["qa"]}"
+    Environment = var.environment["qa"]
   }
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family                   = "${var.name}-task-${var.environment}"
+  family                   = "${var.stack["api"]}-task-${var.environment["qa"]}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.container_cpu
-  memory                   = var.container_memory
+  cpu                      = var.container_cpu["qa"]
+  memory                   = var.container_memory["qa"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
-    name        = "${var.name}-container-${var.environment}"
+    name        = "${var.stack["api"]}-container-${var.environment["qa"]}"
     image       = "${var.container_image}:latest"
     essential   = true
-    environment = var.container_environment
+    environment = var.environment["qa"]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -144,24 +38,24 @@ resource "aws_ecs_task_definition" "main" {
   }])
 
   tags = {
-    Name        = "${var.name}-task-${var.environment}"
+    Name        = "${var.stack["api"]}-task-${var.environment["qa"]}"
     Environment = var.environment
   }
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = "${var.name}-cluster-${var.environment}"
+  name = "${var.stack["api"]}-cluster-${var.environment["qa"]}"
   tags = {
-    Name        = "${var.name}-cluster-${var.environment}"
+    Name        = "${var.stack["api"]}-cluster-${var.environment["qa"]}"
     Environment = var.environment
   }
 }
 
 resource "aws_ecs_service" "main" {
-  name                               = "${var.name}-service-${var.environment}"
+  name                               = "${var.stack["api"]}-service-${var.environment["qa"]}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
-  desired_count                      = var.service_desired_count
+  desired_count                      = var.service_desired_count["qa"]
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
   health_check_grace_period_seconds  = 60
@@ -176,7 +70,7 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = var.aws_alb_target_group_arn
-    container_name   = "${var.name}-container-${var.environment}"
+    container_name   = "${var.stack["api"]}-container-${var.environment["qa"]}"
     container_port   = var.container_port
   }
 
