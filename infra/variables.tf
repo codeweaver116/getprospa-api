@@ -1,4 +1,38 @@
-#Ecs variables
+variable "environment" {
+    type = map(string)    
+    default = {
+
+          qa ="qa"
+        staging = "staging"
+        development= "development"
+        production ="production"
+    }
+  
+}
+
+variable "stack" {
+    type = map(string)
+    default = {
+
+        api ="api"
+        monitoring = "monitoring"
+        database= "database"
+        networking ="networking"
+        security ="security"
+
+    }
+  
+}
+
+variable "region" {
+    default = "us-east-1"
+  
+}
+
+variable "organization_name" {
+    default = "getprospa"
+  
+}
 variable "service_desired_count" {
   description = "Number of tasks running in parallel"
   type = map(number)
@@ -37,5 +71,5 @@ variable "container_memory" {
 
 variable "health_check_path" {
   description = "Http path for task health check"
-  default     = "/" #change this to your default health check
+  default     = "/" #change this to your default health check ideally 
 }
