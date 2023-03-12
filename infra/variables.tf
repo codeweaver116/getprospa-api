@@ -73,3 +73,15 @@ variable "health_check_path" {
   description = "Http path for task health check"
   default     = "/" #change this to your default health check ideally 
 }
+
+variable "alb_tls_cert_arn" {
+  description = "The ARN of the certificate that the ALB uses for https"
+    default     = {
+        qa = "qa arn for tls certificate"
+        staging = "staging arn for tls certificate"
+        development = "development arn for tls certificate"
+        production = "production arn for tls certificate"
+  }
+
+}
+
