@@ -34,7 +34,7 @@ resource "aws_security_group" "alb" {
 
 resource "aws_security_group" "ecs_tasks" {
   name   = "${var.stack["api"]}-sg-task-${var.environment["qa"]}"
-  vpc_id = data.terraform_remote_state.outputs.vpc.vpc_id
+  vpc_id = var.vpc_id
 
   ingress {
     protocol         = "tcp"

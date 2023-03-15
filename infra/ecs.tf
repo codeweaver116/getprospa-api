@@ -17,10 +17,9 @@ resource "aws_ecs_task_definition" "main" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
-    name        = "getprospa-${var.stack["api"]}-container-${var.environment["qa"]}"
-    image       = "${var.stack["api"]}_${var.environment["qa"]}:latest"
-    essential   = true
-    environment = var.environment["qa"]
+    name      = "getprospa-${var.stack["api"]}-container-${var.environment["qa"]}"
+    image     = "${var.stack["api"]}_${var.environment["qa"]}:latest"
+    essential = true
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -35,20 +34,17 @@ resource "aws_ecs_task_definition" "main" {
         awslogs-region        = var.region
       }
     }
-    secrets = {
-
-      name      = "dd_api_key",
-      valueFrom = data.aws_ssm_parameter.datadogs_key.name
-    }
     },
+
 
     {
       essential = true,
       image     = "amazon/aws-for-fluent-bit:stable"
       name      = "log_router"
       firelensConfiguration = {
-        type    = "fluentbit"
-        options = { "enable-ecs-log-metadata" : "true" }
+        type = "fluentbit"
+        options = { enable-ecs-log-metadata = "true"
+        }
       }
 
       logConfiguration = {
@@ -97,14 +93,14 @@ resource "aws_ecs_service" "main" {
   scheduling_strategy                = "REPLICA"
 
   network_configuration {
-    security_groups  = var.ecs_service_security_groups
+    security_groups  = [aws_security_group.ecs_tasks.name]
     subnets          = var.subnet_ids
     assign_public_ip = false
   }
 
   load_balancer {
-    target_group_arn = var.aws_alb_target_group_arn
-    container_name   = "${var.stack["api"]}-container-${var.environment["qa"]}"
+    target_group_arn = aws_alb_target_group.main.arn
+    container_name   = "getprospa-${var.stack["api"]}-container-${var.environment["qa"]}"
     container_port   = var.container_port
   }
 

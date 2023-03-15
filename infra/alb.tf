@@ -2,7 +2,7 @@ resource "aws_lb" "main" {
   name               = "${var.stack["api"]}-alb-${var.environment["qa"]}"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = var.alb_security_groups
+  security_groups    = [aws_security_group.alb.id]
   subnets            = var.subnet_ids
 
 
