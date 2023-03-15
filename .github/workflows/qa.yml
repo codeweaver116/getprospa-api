@@ -11,10 +11,9 @@ name: "QA"
     branches:
       - master
 env:
-  IMAGE_TAG: latest
   AWS_REGION: us-east-1   
-  ECR_REPOSITORY: getprospa_api_ecr_qa               
-  ECR_REGISTRY: getprospa_api_ecr_qa:latest 944936833704.dkr.ecr.us-east-1.amazonaws.com 
+ # ECR_REPOSITORY: getprospa_api_ecr_qa               
+  #ECR_REGISTRY: getprospa_api_ecr_qa:latest 944936833704.dkr.ecr.us-east-1.amazonaws.com 
   ECS_SERVICE:  getprospa-api-service-qa                  
   ECS_CLUSTER: getprospa-cluster-qa                   
   CONTAINER_NAME:  getprospa-api-container-qa          
@@ -57,9 +56,9 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         run: |
-          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG .
-          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
-          echo "::set-output name=image::${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG"
+          docker build -t 944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest .
+          docker push 944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest
+          echo "::set-output name=image::944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest
 
       - name: Download task definition
         run: |
