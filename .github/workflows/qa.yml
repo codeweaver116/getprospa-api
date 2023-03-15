@@ -59,7 +59,7 @@ jobs:
           cd app
           docker build -t 944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest .
           docker push 944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest
-          echo "::set-output name=image::944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest
+          echo "::set-output name=image::944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest"
 
       - name: Download task definition
         run: |
