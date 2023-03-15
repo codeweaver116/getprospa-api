@@ -9,6 +9,7 @@ resource "aws_db_instance" "main" {
   password             = random_password.password.result
   db_subnet_group_name = "my_database_subnet_group"
   parameter_group_name = "default.mysql5.7"
+  
 }
 
 
