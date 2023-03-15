@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "main" {
   family                   = "${var.stack["api"]}-task-${var.environment["qa"]}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.container_cpu["qa"]
-  memory                   = var.container_memory["qa"]
+  cpu                      = 256
+  memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "main" {
         logDriver = "awsfirelens"
         options = {
           Name           = "datadog"
-          apikey         = data.aws_ssm_parameter.datadogs_key.name
+          apikey         = data.aws_ssm_parameter.datadogs_key.value
           Host           = "http-intake.logs.datadoghq.com"
           dd_service     = "geprospa-${var.stack["api"]}-${var.environment["qa"]}"
           dd_source      = "geprospa-${var.stack["api"]}-backnend${var.environment["qa"]}"
@@ -93,7 +93,7 @@ resource "aws_ecs_service" "main" {
   scheduling_strategy                = "REPLICA"
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs_tasks.name]
+    security_groups  = [aws_security_group.ecs_tasks.id]
     subnets          = var.subnet_ids
     assign_public_ip = false
   }

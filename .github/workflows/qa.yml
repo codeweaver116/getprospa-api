@@ -8,7 +8,7 @@ on:
 env:
   IMAGE_TAG: latest
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: getprospa_api_ecr_qa           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: 944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa           # set this to your Amazon ECR repository name
   ECS_SERVICE:  getprospa-api-service-qa                  # set this to your Amazon ECS service name
   ECS_CLUSTER: getprospa-cluster-qa                   # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
@@ -47,9 +47,9 @@ jobs:
           # be deployed to ECS.
           cd ../app
           ls
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def

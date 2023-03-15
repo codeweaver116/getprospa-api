@@ -52,7 +52,7 @@ variable "service_desired_count" {
   }
 }
 variable "subnet_ids" {
-  default = ["subnet-0a2a8d839bec34b0d,subnet-0e31ea94468fac418,subnet-0c3de944c3221e68f"]
+  default = ["subnet-0a2a8d839bec34b0d", "subnet-0e31ea94468fac418", "subnet-0c3de944c3221e68f"]
 }
 
 variable "subnet_id" {
