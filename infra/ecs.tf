@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "main" {
 
   tags = {
     Name        = "${var.stack["api"]}-task-${var.environment["qa"]}"
-    Environment = var.environment
+    Environment =var.environment["qa"]
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_ecs_cluster" "main" {
   name = "${var.stack["api"]}-cluster-${var.environment["qa"]}"
   tags = {
     Name        = "${var.stack["api"]}-cluster-${var.environment["qa"]}"
-    Environment = var.environment
+    Environment = var.environment["qa"]
   }
 }
 
@@ -65,7 +65,7 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups  = var.ecs_service_security_groups
-    subnets          = var.subnets.*.id
+    subnets          =  data.terraform_remote_state.outputs.vpc.public_subnets.*.id
     assign_public_ip = false
   }
 

@@ -54,7 +54,7 @@ variable "service_desired_count" {
 
 variable "container_port" {
   description = "The port where the Docker is exposed"
-  default     = 8080
+  default     = 5000
 }
 
 variable "container_cpu" {

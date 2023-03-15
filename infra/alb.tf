@@ -3,7 +3,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = var.alb_security_groups
-  subnets            = data.terraform_remote_state.outputs.vpc.vpc_id
+  subnets            = data.terraform_remote_state.outputs.vpc.public_subnets.*.id
 
 
   enable_deletion_protection = false
@@ -49,7 +49,8 @@ resource "aws_alb_listener" "http" {
     }
 }
 
-# # Redirect traffic to target group [redirection on possible with ssl certificate which i cant afford now]
+# # Redirect traffic to target group 
+#[redirection on possible with ssl certificate which i cant afford now]****
 # resource "aws_alb_listener" "https" {
 #     load_balancer_arn = aws_lb.main.id
 #     port              = 443
