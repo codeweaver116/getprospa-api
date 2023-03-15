@@ -1,55 +1,55 @@
 variable "environment" {
-    type = map(string)    
-    default = {
+  type = map(string)
+  default = {
 
-          qa ="qa"
-        staging = "staging"
-        development= "development"
-        production ="production"
-    }
-  
+    qa          = "qa"
+    staging     = "staging"
+    development = "development"
+    production  = "production"
+  }
+
 }
 
 variable "stack" {
-    type = map(string)
-    default = {
+  type = map(string)
+  default = {
 
-        api ="api"
-        monitoring = "monitoring"
-        database= "database"
-        networking ="networking"
-        security ="security"
+    api        = "api"
+    monitoring = "monitoring"
+    database   = "database"
+    networking = "networking"
+    security   = "security"
 
-    }
-  
+  }
+
 }
 
 variable "region" {
-    default = "us-east-1"
-  
+  default = "us-east-1"
+
 }
 
 variable "database_username" {
-  default="getprospa"
+  default = "getprospa"
 }
 
 variable "database_name" {
-  default="getprospa_db"
+  default = "getprospa_db"
 }
 
 variable "organization_name" {
-    default = "getprospa"
-  
+  default = "getprospa"
+
 }
 variable "service_desired_count" {
   description = "Number of tasks running in parallel"
-  type = map(number)
+  type        = map(number)
   default = {
-        qa =1
-        staging = 1
-        development= 2
-        production =4
-    }
+    qa          = 1
+    staging     = 1
+    development = 2
+    production  = 4
+  }
 }
 
 variable "container_port" {
@@ -59,21 +59,21 @@ variable "container_port" {
 
 variable "container_cpu" {
   description = "The number of cpu units used by the task"
-  default     = {
-        qa = 256 
-        staging = 256
-        development = 256
-        production = 256
+  default = {
+    qa          = 256
+    staging     = 256
+    development = 256
+    production  = 256
   }
 }
 
 variable "container_memory" {
   description = "The amount (in MiB) of memory used by the task"
-   default     = {
-        qa =512  
-        staging = 512 
-        development = 512
-        production = 512
+  default = {
+    qa          = 512
+    staging     = 512
+    development = 512
+    production  = 512
   }
 }
 
@@ -84,11 +84,11 @@ variable "health_check_path" {
 
 variable "alb_tls_cert_arn" {
   description = "The ARN of the certificate that the ALB uses for https"
-    default     = {
-        qa = "qa arn for tls certificate"
-        staging = "staging arn for tls certificate"
-        development = "development arn for tls certificate"
-        production = "production arn for tls certificate"
+  default = {
+    qa          = "qa arn for tls certificate"
+    staging     = "staging arn for tls certificate"
+    development = "development arn for tls certificate"
+    production  = "production arn for tls certificate"
   }
 
 }

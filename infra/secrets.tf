@@ -1,5 +1,5 @@
 data "aws_ssm_parameter" "datadogs_key" {
-  name =  "/${var.stack["api"]}/${var.environment["qa"]}/datadogs"
+  name = "/${var.stack["api"]}/${var.environment["qa"]}/datadogs"
 }
 
 # resource "aws_ssm_parameter" "database_secret" {

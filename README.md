@@ -11,7 +11,7 @@ b.	Bitbucket/Github
 c.	Code Pipeline
 d.	Helm Charts for Deployment (Will work on top of Kubernertes to shorten the deployment time)
 3.	Database Management on AWS (MySQL v8)
-4.	How would you handle migration from Digital Ocean to AWS
+4.	How would you handle migration from Digital Ocean to AWS [use data migration tool from ]
 
 
 # Technical Challenge
@@ -46,14 +46,34 @@ Design Considerations:
 
 
 
-Production ready Suggestions
-****************************
-1. Integration
-2. Caching
-3. API Monitization: throttling, client security, developers portal, metering, documentation etc
-4. Authentication: jwt, aws cognito
-
 
 Proposed Production Ready Architecture
 **************************************
 
+
+
+
+
+Production/Enterprise ready Suggestions
+****************************
+1. API Gateway Integration [ 
+        Caching
+        API Monitization: throttling, client security, developers portal, metering, documentation etc
+        Authentication: jwt, aws cognito
+2  Multi region availability of RDS database with reader and writer endpoints
+
+
+Other consideration
+********************
+1. Release Management
+2. Disaster recovery plan and site
+3. Oncall rotation plan
+4. Incident management: [possible integrations with pagerduty which is an addon already on datadogs]
+5. Build status notification via collaboration channel such as: slack, teams and others.
+
+
+
+
+
+#Refrence resources
+*******************

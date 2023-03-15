@@ -18,14 +18,14 @@ resource "aws_ecs_task_definition" "main" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
     name        = "${var.stack["api"]}-container-${var.environment["qa"]}"
-    image       = "${var.container_image}:latest"
+    image       = "${var.stack["api"]}_${var.environment["qa"]}:latest"
     essential   = true
     environment = var.environment["qa"]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
       hostPort      = var.container_port,
-      
+
     }]
     logConfiguration = {
       logDriver = "awslogs"
@@ -35,12 +35,27 @@ resource "aws_ecs_task_definition" "main" {
         awslogs-region        = var.region
       }
     }
-    secrets = var.container_secrets
-  }])
+    secrets = {
+
+      name      = "dd_api_key",
+      valueFrom = data.aws_ssm_parameter.datadogs_key.name
+    }
+    },
+    {
+      essential = true,
+      image     = "amazon/aws-for-fluent-bit:stable"
+      name      = "log_router"
+      firelensConfiguration = {
+        type    = "fluentbit"
+        options = { "enable-ecs-log-metadata" : "true" }
+      }
+    }
+
+  ])
 
   tags = {
     Name        = "${var.stack["api"]}-task-${var.environment["qa"]}"
-    Environment =var.environment["qa"]
+    Environment = var.environment["qa"]
   }
 }
 
@@ -65,7 +80,7 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups  = var.ecs_service_security_groups
-    subnets          =  data.terraform_remote_state.outputs.vpc.public_subnets.*.id
+    subnets          = data.terraform_remote_state.outputs.vpc.public_subnets.*.id
     assign_public_ip = false
   }
 
