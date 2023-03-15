@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "main" {
-  name                 = "${var.stack["api"]}-${var.environment["qa"]}"
+  name                 = "getprospa_${var.stack["api"]}_ecr_${var.environment["qa"]}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {

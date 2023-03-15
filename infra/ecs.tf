@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "main" {
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([{
-    name        = "${var.stack["api"]}-container-${var.environment["qa"]}"
+    name        = "getprospa-${var.stack["api"]}-container-${var.environment["qa"]}"
     image       = "${var.stack["api"]}_${var.environment["qa"]}:latest"
     essential   = true
     environment = var.environment["qa"]
@@ -78,7 +78,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = "${var.stack["api"]}-cluster-${var.environment["qa"]}"
+  name = "getprospa-cluster-${var.environment["qa"]}"
   tags = {
     Name        = "${var.stack["api"]}-cluster-${var.environment["qa"]}"
     Environment = var.environment["qa"]
@@ -86,7 +86,7 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_service" "main" {
-  name                               = "${var.stack["api"]}-service-${var.environment["qa"]}"
+  name                               = "getprospa-${var.stack["api"]}-service-${var.environment["qa"]}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
   desired_count                      = var.service_desired_count["qa"]
