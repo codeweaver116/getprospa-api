@@ -41,6 +41,7 @@ resource "aws_ecs_task_definition" "main" {
       valueFrom = data.aws_ssm_parameter.datadogs_key.name
     }
     },
+
     {
       essential = true,
       image     = "amazon/aws-for-fluent-bit:stable"
@@ -49,7 +50,24 @@ resource "aws_ecs_task_definition" "main" {
         type    = "fluentbit"
         options = { "enable-ecs-log-metadata" : "true" }
       }
+
+      logConfiguration = {
+        logDriver = "awsfirelens"
+        options = {
+          Name           = "datadog"
+          apikey         = data.aws_ssm_parameter.datadogs_key.name
+          Host           = "http-intake.logs.datadoghq.com"
+          dd_service     = "geprospa-${var.stack["api"]}-${var.environment["qa"]}"
+          dd_source      = "geprospa-${var.stack["api"]}-backnend${var.environment["qa"]}"
+          dd_message_key = "log"
+          dd_tags        = "env:dev, Stack:api, Source:api-backend"
+          TLS            = "on"
+          provider       = "ecs"
+        }
+      }
     }
+
+
 
   ])
 
