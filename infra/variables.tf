@@ -29,6 +29,14 @@ variable "region" {
   
 }
 
+variable "database_username" {
+  default="getprospa"
+}
+
+variable "database_name" {
+  default="getprospa_db"
+}
+
 variable "organization_name" {
     default = "getprospa"
   
