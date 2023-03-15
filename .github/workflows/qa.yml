@@ -49,7 +49,7 @@ jobs:
           cd app
           ls
           docker build -t $ECR_REGISTRY:${{ env.IMAGE_TAG }} .
-          docker push $ECR_REGISTRY:${{ env.IMAGE_TAG }}
+          docker push 944936833704.dkr.ecr.us-east-1.amazonaws.com/getprospa_api_ecr_qa:latest
           echo "image=$ECR_REGISTRY:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
 
       - name: Fill in the new image ID in the Amazon ECS task definition
