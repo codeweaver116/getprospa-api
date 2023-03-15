@@ -4,7 +4,7 @@ data "terraform_remote_state" "vpc" {
   config = {
     organization = "Oaklabs"
     workspaces = {
-      name = "getprospa-${var.stack["networking"]}-${var.environment["qa"]}"
+      name = "getprospa-networking-qa"
     }
   }
 }

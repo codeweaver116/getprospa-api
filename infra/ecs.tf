@@ -98,7 +98,7 @@ resource "aws_ecs_service" "main" {
 
   network_configuration {
     security_groups  = var.ecs_service_security_groups
-    subnets          = data.terraform_remote_state.outputs.vpc.public_subnets.*.id
+    subnets          = var.subnet_ids
     assign_public_ip = false
   }
 

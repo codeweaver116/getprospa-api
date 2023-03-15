@@ -3,7 +3,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = var.alb_security_groups
-  subnets            = data.terraform_remote_state.outputs.vpc.public_subnets.*.id
+  subnets            = var.subnet_ids
 
 
   enable_deletion_protection = false
@@ -18,7 +18,7 @@ resource "aws_alb_target_group" "main" {
   name        = "${var.stack["api"]}-tg-${var.environment["qa"]}"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {

@@ -51,7 +51,13 @@ variable "service_desired_count" {
     production  = 4
   }
 }
+variable "subnet_ids" {
+  default = "subnet-0a2a8d839bec34b0d,subnet-0e31ea94468fac418,subnet-0c3de944c3221e68f"
+}
 
+variable "vpc_id" {
+  default = "vpc-0532330bf1615770f"
+}
 variable "container_port" {
   description = "The port where the Docker is exposed"
   default     = 5000

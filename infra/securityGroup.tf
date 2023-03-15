@@ -1,6 +1,6 @@
 resource "aws_security_group" "alb" {
   name   = "${var.stack["api"]}-sg-alb-${var.environment["qa"]}"
-  vpc_id = data.terraform_remote_state.outputs.vpc.vpc_id
+  vpc_id = var.vpc_id
 
   ingress {
     protocol         = "tcp"
