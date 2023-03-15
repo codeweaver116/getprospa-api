@@ -6,12 +6,13 @@ on:
       - main
 
 env:
+  IMAGE_TAG: latest
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: getprospa_api_ecr_qa           # set this to your Amazon ECR repository name
   ECS_SERVICE:  getprospa-api-service-qa                  # set this to your Amazon ECS service name
   ECS_CLUSTER: getprospa-cluster-qa                   # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
+                                              # file, e.g. .aws/task-definition.json
   CONTAINER_NAME:  getprospa-api-container-qa          # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
@@ -40,7 +41,6 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
