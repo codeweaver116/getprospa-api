@@ -1,5 +1,5 @@
 ---
-name: "workflow"
+name: "QA"
 
 'on':
   push:
@@ -75,7 +75,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: ${{ env.CONTAINER_NAME  # edit me
+          container-name: ${{ env.CONTAINER_NAME }}  # edit me
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
